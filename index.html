@@ -15,7 +15,7 @@
    <button style="height:20px;width:50px"  onclick="showViz('1990')"> 1990 </button>
    <button style="height:20px;width:50px"  onclick="showViz('2000')"> 2000 </button>
    <button style="height:20px;width:50px"  onclick="showViz('2010')"> 2010 </button>
-    <button style="height:20px;width:50px" onclick="showViz('2017')"> 2017 </button>
+   <button style="height:20px;width:50px" onclick="showViz('2017')"> 2017 </button>
   </div>
 
 <div id="dataviz"></div>
@@ -205,6 +205,16 @@ d3.select("svg").append("text")   //y-axis label
         .style("font-size","12")
         .style("fill","#736c6c")
         .text("Gross Domestic Product(GDP) in USD");
+
+ d3.select("svg").append("text")  //x-axis label
+        .attr("y", height+margin-30)
+        .attr("x",900)
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .style("font-family","verdana")
+        .style("font-size","9")
+        .style("fill","#736c6c")
+        .text("Hover over the bubble for more information. Size of bubble indicates country population");
 
  d3.select("svg").selectAll("g")  //populate with country names
         .data(data1)
