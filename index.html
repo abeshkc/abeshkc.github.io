@@ -1,0 +1,92 @@
+<html>
+<script src='https://d3js.org/d3.v5.min.js'></script>
+<div id="dataviz"></div>
+<style> circle {fill: blue; stroke: gray; stroke-width:0.5;} </style>
+<body onload='init()'>
+
+<script>
+
+async function init() {
+
+  var margin= {top:10,right:10,bottom:10,left:10},
+      width = 400-margin.left-margin.right,
+      height = 250-margin.top-margin.bottom;
+
+ var x = d3.scaleLinear().domain([1,150]).range([0,1000]);
+ var y = d3.scaleLinear().domain([1,122]).range([height,0]);
+ 
+ var tooltip = d3.select("#dataviz")
+    .append("div")
+    .attr("class","tooltip")
+    .style("opacity",0)
+    .style("background-color","white")
+    .style("border","solid")
+    .style("border-width","0.5px")
+    .style("padding","5px")
+    .style("position","absolute");
+
+ var tipMouseover = function(d) {
+                  var html  = "MPG:"+d.AverageCityMPG + "<br/>" +
+                              "Average"+d.AverageHighwayMPG + "<br/>";
+
+      tooltip.html(html)
+             .style("left", (d3.event.pageX ) + "px")
+             .style("top", (d3.event.pageY) + "px")
+             .transition()
+             .duration(200) // ms
+             .style("opacity", .7)
+             };
+
+  var tipMouseout = function(d) {
+                  tooltip.transition()
+                      .duration(300) // ms
+                      .style("opacity", 0); // don't care about position!
+              };
+
+
+const data = await d3.csv(
+      'https://flunky.github.io/cars2017.csv');
+
+var svg = d3.select("#dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform","translate("+margin.left+","+margin.top+")")
+    .selectAll("circle")
+    .data(data)
+    .enter()
+    .append("circle")
+    .attr("cx", function(d,i) {
+      return x(d.AverageCityMPG);})
+    .attr("cy", function(d,i) {
+     return y(d.AverageHighwayMPG);}) 
+    .attr("r", function(d) {
+     return (d.EngineCylinders);})
+    .on('mouseover', tipMouseover)
+     .on('mouseout', tipMouseout)
+     
+    ; //closes main select
+
+   
+        
+}
+
+    
+
+ //d3.select("svg").append("g")
+ //  .attr("transform","translate(50,50)")
+ //  .call(d3.axisLeft(y)
+     //.tickValues([10,20,50,100])
+     //.tickFormat(d3.format("~s"))
+   //  );
+
+//d3.select("svg").append("g")
+//   .attr("transform","translate(50,450)")
+//   .call(d3.axisBottom(x)
+   //.tickValues([10,20,50,100])
+   //.tickFormat(d3.format("~s"))
+  //   );
+ </script>
+</body>
+</html>
